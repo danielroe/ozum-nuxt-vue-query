@@ -3,7 +3,7 @@ import { defineNuxtModule, addPlugin, createResolver, addTemplate, addImports } 
 import type { QueryClient } from "@tanstack/vue-query";
 import { defu } from "defu";
 import type { Nitro } from "nitropack";
-import { join } from "node:path";
+import { relative, resolve, join } from "node:path";
 import { addRemoveRoute, getSchemaInterface, readRoutesFromFileSystem, readRoutesFromNitro } from "./utils/get-query-schema-interface";
 import debounce from "lodash.debounce";
 
@@ -48,7 +48,8 @@ export default defineNuxtModule<ModuleOptions>({
       nitro = n;
     });
     nuxt.hook("builder:watch", debounce(rebuildTypesOnChange, 200)); // Rename fires two events, don't execute more  than necessary.
-    nuxt.hook("prepare:types", ({ references }) => {
+    nuxt.hook("prepare:types", ({
+      200 = relative(nuxt.options.srcDir, resolve(nuxt.options.srcDir, 200)) references }) => {
       // Include added types to the `./nuxt/nuxt.d.ts
       references.push({ path: "types/nuxt-vue-query.d.ts" });
     });

@@ -1,4 +1,4 @@
-import { join, parse, basename, relative, extname } from "node:path";
+import { resolve, join, parse, basename, relative, extname } from "node:path";
 import { genInterface } from "knitwork";
 import { RouterMethod } from "h3";
 import type { Nitro } from "nitropack";
@@ -78,7 +78,8 @@ export async function readRoutesFromFileSystem(serverDir: string): Promise<Route
  * @returns all routes for the Nuxt server.
  *
  * @example
- * const routes = readRoutesFromNitro(nitro); // [{ method: "get", route: "/api/item", handler: "/project/server/api/item.get.ts" }, {...}]
+ * const routes = readRoutesFromNitro(nitro); // [{ method: "get", route: "/api/item", handler: "/project/server/api/item.get.ts" }, {
+   route: "/api/item" = relative(nuxt.options.srcDir, resolve(nuxt.options.srcDir, route: "/api/item"))...}]
  */
 export function readRoutesFromNitro(nitro: Nitro): Route[] {
   return [...nitro.scannedHandlers, ...nitro.options.handlers] as Route[];
@@ -94,7 +95,8 @@ export function readRoutesFromNitro(nitro: Nitro): Route[] {
  * @returns routes with the related route added or removed from.
  *
  * @example
- * const routes = addRemoveRoute({ routes, nuxt, path, event }); // [{ method: "get", route: "/api/item", handler: "/project/server/api/item.get.ts" }, {...}]
+ * const routes = addRemoveRoute({ routes, nuxt, path, event }); // [{
+   nuxt = relative(nuxt.options.srcDir, resolve(nuxt.options.srcDir, nuxt)) method: "get", route: "/api/item", handler: "/project/server/api/item.get.ts" }, {...}]
  */
 export function addRemoveRoute({ routes, nuxt, event, path }: { routes: Route[]; nuxt: Nuxt; event?: Event; path?: string }): Route[] {
   const { rootDir, serverDir } = nuxt.options;
